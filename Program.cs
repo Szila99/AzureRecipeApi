@@ -26,5 +26,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGet("/api/status", () => Results.Ok("OK"));
 
 app.Run();
