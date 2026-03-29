@@ -1,9 +1,8 @@
-using Recipe;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<RecipeContext>(options => options.UseInMemoryDatabase("RecipeDb"));
+builder.Services.AddDbContext<Recipe.RecipeContext>(options => options.UseInMemoryDatabase("RecipeList"));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -15,17 +14,13 @@ builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 var app = builder.Build();
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Urls.Add($"http://*:{port}");
-
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseRouting();
-
+app.UseHttpsRedirection();
 app.UseAuthorization();
-
 app.MapControllers();
-app.MapGet("/api/status", () => Results.Ok("OK"));
+
+app.MapGet("/health", () => Results.Ok("A Backend fut!"));
 
 app.Run();
